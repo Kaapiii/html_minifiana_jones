@@ -40,7 +40,7 @@ class HtmlMinifyMiddleware implements MiddlewareInterface
         // Remove multiple white spaces
         $html = preg_replace('/[[:blank:]]+/', ' ', $html);
         
-        // Remove white space between html tags; shorten multiple whitespaces to one
+        // Remove white-spaces characters between html tags
         $html = preg_replace('/(\>)\s*(\<)/m', '$1$2', $html);
 
         $response->setContent($html);
