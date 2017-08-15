@@ -24,10 +24,26 @@ class HtmlMinifyMiddleware implements MiddlewareInterface
     public function process(Request $request, DelegateInterface $frame)
     {
         $response = $frame->next($request);
-        $minifiedContent = preg_replace(array('/<!--(.*)-->/Uis',"/[[:blank:]]+/"),array('',' '),str_replace(array("\n","\r","\t"),'',$response->getContent()));
+        
+        $html = $response->getContent();
+        
+        // Remove Comments 
+        // - Single line //
+        // - Multiline on one line /* */
+        // - Multiline comments on multiple lines
+        $commentPattern = '/(?:(?:\/\*(?:[^*]|(?:\*+[^*\/]))*\*+\/)|(?:(?<!\:|\\\|\'|\")\/\/.*))/';
+        $html = preg_replace($commentPattern, '', $html);
+        
+        // Remove line breaks
+        $html = str_replace(array("\n","\r","\t"),' ',$html);
+        
+        // Remove multiple white spaces
+        $html = preg_replace('/[[:blank:]]+/', ' ', $html);
+        
+        // Remove white space between html tags; shorten multiple whitespaces to one
+        $html = preg_replace('/(\>)\s*(\<)/m', '$1$2', $html);
 
-        $response->setContent($minifiedContent);
-
+        $response->setContent($html);
         return $response;
     }
 }
