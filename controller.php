@@ -14,7 +14,7 @@ class Controller extends \Concrete\Core\Package\Package
     protected $appVersionRequired = '8.0.0';
     protected $pkgVersion         = '1.0.0';
     protected $pkgAutoloaderRegistries = array(
-        'src\Kaapiii' => '\Kaapiii',
+        'src/Kaapiii' => '\Kaapiii',
     );
 
     public function getPackageDescription()
